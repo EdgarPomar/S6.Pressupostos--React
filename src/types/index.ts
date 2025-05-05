@@ -4,4 +4,8 @@ export interface Service {
     price: number
     selected: boolean
 }
-  
+
+export type WebConfig = {
+    pages: number
+    languages: number
+}
