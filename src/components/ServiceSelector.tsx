@@ -12,7 +12,7 @@ const ServiceSelector: React.FC<Props> = ({ service, onToggle, children }) => {
     <div className={`service ${service.selected ? 'selected' : ''}`}>
       <div>
         <strong>{service.name}</strong>
-        {service.name && <span> - {service.price} €</span>}
+        {service.name  && <span> - {service.price} €</span>}
       </div>
       <label>
         <input

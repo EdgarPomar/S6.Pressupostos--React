@@ -7,7 +7,7 @@
 }
 
 body {
-  font-family: "Segoe UI", sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   background: var(--bg);
   color: var(--text);
   margin: 0;
@@ -28,6 +28,21 @@ h1 {
   margin-bottom: 30px;
   text-align: center;
   color: #222;
+}
+
+button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+button:hover {
+  background-color: #27ae60;
 }
 
 .service-list {
@@ -66,6 +81,8 @@ label {
   align-items: center;
   gap: 10px;
   font-size: 16px;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 input[type="checkbox"] {
@@ -79,20 +96,25 @@ input[type="checkbox"] {
   flex-wrap: wrap;
 }
 
-.web-config label {
-  flex-direction: column;
-  align-items: flex-start;
-  font-weight: 500;
-  font-size: 14px;
-}
-
 .web-config input[type="number"] {
-  margin-top: 6px;
   padding: 8px;
   width: 80px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 16px;
+  text-align: center;
+}
+
+.number-input {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.number-input button {
+  padding: 6px 12px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .total {
@@ -103,34 +125,4 @@ input[type="checkbox"] {
   color: #111;
   border-top: 1px solid #ddd;
   padding-top: 20px;
-}
-
-.input-group {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.input-group button {
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.input-group button:hover {
-  background-color: #27ae60;
-}
-
-.input-group input {
-  padding: 8px;
-  width: 80px;
-  text-align: center;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
 }
