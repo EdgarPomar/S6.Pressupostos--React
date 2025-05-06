@@ -5,7 +5,13 @@ export interface Service {
     selected: boolean
 }
 
-export type WebConfig = {
+export interface WebConfig {
     pages: number
     languages: number
+}
+
+export interface Budget {
+    name: string
+    date: string
+    total: number
 }

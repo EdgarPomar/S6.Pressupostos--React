@@ -1,12 +1,15 @@
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
-import './styles.css'
-import AppRoutes from './router/AppRouter'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Welcome from "./pages/Welcome.tsx";
+import Calculator from "./components/Calculator.tsx";
 
-const App: React.FC = () => (
-  <BrowserRouter>
-    <AppRoutes />
-  </BrowserRouter>
+const AppRouter: React.FC = () => (
+    <Router>
+        <Routes>
+            <Route path="/" element={<Welcome />} />
+            <Route path="/calculator" element={<Calculator />} />
+        </Routes>
+    </Router>
 )
 
-export default App
+export default AppRouter
