@@ -1,14 +1,15 @@
 export interface Service {
     id: string
     name: string
-    price: number
     selected: boolean
+    price: number
 }
 
 export interface WebConfig {
     pages: number
     languages: number
 }
+
 
 export interface Budget {
     name: string
