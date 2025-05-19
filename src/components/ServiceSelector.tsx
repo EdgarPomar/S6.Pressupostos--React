@@ -15,7 +15,11 @@ const ServiceSelector: React.FC<Props> = ({ service, onToggle, children }) => {
   }
 
  return (
+  <div className='ordenar-services'>
+
   <div className={`service ${service.selected ? 'selected' : ''}`}>
+    
+
     <div className="service-col service-info">
       <strong>{service.name}</strong>
       <div className="service-description">
@@ -37,9 +41,17 @@ const ServiceSelector: React.FC<Props> = ({ service, onToggle, children }) => {
         <span>Afegir</span>
       </label>
     </div>
+    
 
-    {service.selected && service.name === 'Web' && children}
+
+
   </div>
+      <div>
+    {service.selected && service.name === 'Web' && children}
+
+    </div>
+  </div>
+
 )
 
 }
