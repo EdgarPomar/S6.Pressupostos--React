@@ -37,13 +37,18 @@ const Calculator: React.FC = () => {
     const [quotes, setQuotes] = useState<Quote[]>([])
     const [searchTerm, setSearchTerm] = useState('')
 
-    const [sortMode, setSortMode] = useState<{ key: 'none' | 'name' | 'date' | 'total'; order: 'asc' | 'desc' }>({
-        key: 'none',
-        order: 'asc'
-    })
+    const [sortMode, setSortMode] = useState<{ key: 'none' | 'name' | 'date' | 'total'; order: 'asc' | 'desc' }>(
+        {
+            key: 'none',
+            order: 'asc'
+        }
+    )
+
+    // Nou estat per activar/desactivar pressupost anual amb descompte
+    const [isAnnual, setIsAnnual] = useState(false)
 
     const total = useMemo(() => {
-        return services.reduce((sum, service) => {
+        let baseTotal = services.reduce((sum, service) => {
             if (service.id === 'web' && service.selected) {
                 return sum + 500 + (webConfig.pages + webConfig.languages) * 30
             } else if (service.selected && service.price) {
@@ -51,7 +56,13 @@ const Calculator: React.FC = () => {
             }
             return sum
         }, 0)
-    }, [services, webConfig])
+
+        if (isAnnual) {
+            baseTotal = baseTotal * 0.8 // 20% de descompte
+        }
+
+        return baseTotal
+    }, [services, webConfig, isAnnual])
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
@@ -149,7 +160,23 @@ const Calculator: React.FC = () => {
                 ))}
             </div>
 
-            <div className="total text-xl font-semibold">Preu pressupostat: {total} €</div>
+            {/* Botó per activar/desactivar pressupost anual */}
+            <div className="mb-4">
+                <label className="inline-flex items-center cursor-pointer">
+                    <input
+                        type="checkbox"
+                        checked={isAnnual}
+                        onChange={() => setIsAnnual(!isAnnual)}
+                        className="form-checkbox"
+                    />
+                    <span className="ml-2 font-medium">Pressupost anual (20% descompte)</span>
+                </label>
+            </div>
+
+            <div className="total text-xl font-semibold">
+                Preu pressupostat: {total.toFixed(2)} €{' '}
+                {isAnnual && <span className="text-green-600 font-semibold ml-2">(Descompte aplicat!)</span>}
+            </div>
 
             <h2 className="section-title text-lg font-bold">Demanar pressupost</h2>
             <form onSubmit={handleSubmit} className="space-y-2">
