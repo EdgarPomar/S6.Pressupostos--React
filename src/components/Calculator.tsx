@@ -23,6 +23,7 @@ type Quote = {
     phone: string
     services: string[]
     total: number
+    createdAt: number
 }
 
 const Calculator: React.FC = () => {
@@ -34,6 +35,8 @@ const Calculator: React.FC = () => {
     const [phone, setPhone] = useState('')
     const [error, setError] = useState('')
     const [quotes, setQuotes] = useState<Quote[]>([])
+    const [sortMode, setSortMode] = useState<'none' | 'name' | 'date'>('none')
+    const [searchTerm, setSearchTerm] = useState('')
 
     const total = useMemo(() => {
         return services.reduce((sum, service) => {
@@ -78,7 +81,8 @@ const Calculator: React.FC = () => {
             email,
             phone,
             services: selectedServices,
-            total
+            total,
+            createdAt: Date.now()
         }
 
         setQuotes([...quotes, newQuote])
@@ -88,10 +92,31 @@ const Calculator: React.FC = () => {
         setError('')
     }
 
+    const filteredAndSortedQuotes = useMemo(() => {
+        let result = [...quotes]
+
+        if (searchTerm.trim()) {
+            result = result.filter(q =>
+                q.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        }
+
+        if (sortMode === 'name') {
+            result.sort((a, b) => a.name.localeCompare(b.name))
+        } else if (sortMode === 'date') {
+            result.sort((a, b) => b.createdAt - a.createdAt)
+        }
+
+        return result
+    }, [quotes, sortMode, searchTerm])
+
     return (
-        <main>
-            <button onClick={() => navigate('/')}>← Tornar a l'inici</button>
-            <h1>Calculadora de Serveis</h1>
+        <main className="p-4 space-y-4">
+            <button className="btn btn-outline mb-4" onClick={() => navigate('/')}>
+                ← Tornar a l'inici
+            </button>
+            <h1 className="text-2xl font-bold">Calculadora de Serveis</h1>
+
             <div className="service-list">
                 {services.map(service => (
                     <ServiceSelector
@@ -106,56 +131,97 @@ const Calculator: React.FC = () => {
                 ))}
             </div>
 
-            <div className="total">Preu pressupostat: {total} €</div>
+            <div className="total text-xl font-semibold">Preu pressupostat: {total} €</div>
 
-            <h2 className="section-title">Demanar pressupost</h2>
-            <form onSubmit={handleSubmit}>
+            <h2 className="section-title text-lg font-bold">Demanar pressupost</h2>
+            <form onSubmit={handleSubmit} className="space-y-2">
                 <input
-                    className="input"
+                    className="form-control"
                     type="text"
                     placeholder="Nom"
                     value={name}
                     onChange={e => setName(e.target.value)}
                 />
                 <input
-                    className="input"
+                    className="form-control"
                     type="text"
                     placeholder="Telèfon"
                     value={phone}
                     onChange={e => setPhone(e.target.value)}
                 />
                 <input
-                    className="input"
+                    className="form-control"
                     type="email"
                     placeholder="Email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                 />
-                <button className="submit-btn" type="submit">
+                <button className="btn btn-success" type="submit">
                     Sol·licitar pressupost →
                 </button>
-                {error && <div className="error">{error}</div>}
+                {error && <div className="text-red-600">{error}</div>}
             </form>
 
             {quotes.length > 0 && (
                 <>
-                    <h2 className="section-title">Pressupostos en curs:</h2>
-                    {quotes.map((q, i) => (
-                        <div key={i} className="quote-card">
-                            <div className="quote-left">
-                                <div className="quote-name">{q.name}</div>
-                                <div className="quote-email">{q.email}</div>
-                                <div className="quote-phone">{q.phone}</div>
+                    <h2 className="section-title text-lg font-bold mt-6">Pressupostos en curs:</h2>
+
+                    {/* Buscador i botons d'ordenació */}
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
+                        {/* Buscador */}
+                        <div className="relative w-full md:w-1/3">
+                            <input
+                                type="text"
+                                className="form-control w-full pl-8"
+                                placeholder="Cerca per nom"
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                            />
+                            <i className="bi bi-search absolute left-2 top-2.5 text-gray-500"></i>
+                        </div>
+
+                        {/* Botons ordenació */}
+                        <div className="flex gap-2">
+                            <button
+                                className="btn btn-outline"
+                                onClick={() => setSortMode('name')}
+                            >
+                                Nom <i className="bi bi-caret-down ml-1"></i>
+                            </button>
+                            <button
+                                className="btn btn-outline"
+                                onClick={() => setSortMode('date')}
+                            >
+                                Data <i className="bi bi-caret-down ml-1"></i>
+                            </button>
+                            <button
+                                className="btn btn-outline"
+                                onClick={() => setSortMode('none')}
+                            >
+                                Reiniciar
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Llistat */}
+                    {filteredAndSortedQuotes.map((q, i) => (
+                        <div key={i} className="quote-card p-4 rounded-lg shadow bg-white mb-4">
+                            <div className="quote-left mb-2">
+                                <div className="font-semibold">{q.name}</div>
+                                <div className="text-sm text-gray-600">{q.email}</div>
+                                <div className="text-sm text-gray-600">{q.phone}</div>
                             </div>
-                            <div className="quote-services">
-                                <div className="quote-services-title">Serveis contractats:</div>
-                                <ul>
+                            <div className="quote-services mb-2">
+                                <div className="font-medium">Serveis contractats:</div>
+                                <ul className="list-disc list-inside">
                                     {q.services.map((s, idx) => (
                                         <li key={idx}>{s}</li>
                                     ))}
                                 </ul>
                             </div>
-                            <div className="quote-total">{q.total} €</div>
+                            <div className="quote-total text-right font-bold text-lg">
+                                {q.total} €
+                            </div>
                         </div>
                     ))}
                 </>
