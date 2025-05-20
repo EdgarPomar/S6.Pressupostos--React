@@ -35,8 +35,12 @@ const Calculator: React.FC = () => {
     const [phone, setPhone] = useState('')
     const [error, setError] = useState('')
     const [quotes, setQuotes] = useState<Quote[]>([])
-    const [sortMode, setSortMode] = useState<'none' | 'name' | 'date'>('none')
     const [searchTerm, setSearchTerm] = useState('')
+
+    const [sortMode, setSortMode] = useState<{ key: 'none' | 'name' | 'date' | 'total'; order: 'asc' | 'desc' }>({
+        key: 'none',
+        order: 'asc'
+    })
 
     const total = useMemo(() => {
         return services.reduce((sum, service) => {
@@ -101,10 +105,24 @@ const Calculator: React.FC = () => {
             )
         }
 
-        if (sortMode === 'name') {
-            result.sort((a, b) => a.name.localeCompare(b.name))
-        } else if (sortMode === 'date') {
-            result.sort((a, b) => b.createdAt - a.createdAt)
+        if (sortMode.key === 'name') {
+            result.sort((a, b) =>
+                sortMode.order === 'asc'
+                    ? a.name.localeCompare(b.name)
+                    : b.name.localeCompare(a.name)
+            )
+        } else if (sortMode.key === 'date') {
+            result.sort((a, b) =>
+                sortMode.order === 'asc'
+                    ? a.createdAt - b.createdAt
+                    : b.createdAt - a.createdAt
+            )
+        } else if (sortMode.key === 'total') {
+            result.sort((a, b) =>
+                sortMode.order === 'asc'
+                    ? a.total - b.total
+                    : b.total - a.total
+            )
         }
 
         return result
@@ -166,44 +184,67 @@ const Calculator: React.FC = () => {
                 <>
                     <h2 className="section-title text-lg font-bold mt-6">Pressupostos en curs:</h2>
 
-                    {/* Buscador i botons d'ordenació */}
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
-                        {/* Buscador */}
                         <div className="relative w-full md:w-1/3">
                             <input
                                 type="text"
-                                className="form-control w-full pl-8"
+                                className="form-control w-full pr-10"
                                 placeholder="Cerca per nom"
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                             />
-                            <i className="bi bi-search absolute left-2 top-2.5 text-gray-500"></i>
+                            <i className="bi bi-search absolute right-3 top-1/2 transform -translate-y-1/2 text-black"></i>
                         </div>
 
-                        {/* Botons ordenació */}
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap">
                             <button
                                 className="btn btn-outline"
-                                onClick={() => setSortMode('name')}
+                                onClick={() =>
+                                    setSortMode(prev =>
+                                        prev.key === 'name'
+                                            ? { ...prev, order: prev.order === 'asc' ? 'desc' : 'asc' }
+                                            : { key: 'name', order: 'asc' }
+                                    )
+                                }
                             >
-                                Nom <i className="bi bi-caret-down ml-1"></i>
+                                Nom {sortMode.key === 'name' && (sortMode.order === 'asc' ? '↑' : '↓')}
                             </button>
+
                             <button
                                 className="btn btn-outline"
-                                onClick={() => setSortMode('date')}
+                                onClick={() =>
+                                    setSortMode(prev =>
+                                        prev.key === 'date'
+                                            ? { ...prev, order: prev.order === 'asc' ? 'desc' : 'asc' }
+                                            : { key: 'date', order: 'asc' }
+                                    )
+                                }
                             >
-                                Data <i className="bi bi-caret-down ml-1"></i>
+                                Data {sortMode.key === 'date' && (sortMode.order === 'asc' ? '↑' : '↓')}
                             </button>
+
                             <button
                                 className="btn btn-outline"
-                                onClick={() => setSortMode('none')}
+                                onClick={() =>
+                                    setSortMode(prev =>
+                                        prev.key === 'total'
+                                            ? { ...prev, order: prev.order === 'asc' ? 'desc' : 'asc' }
+                                            : { key: 'total', order: 'asc' }
+                                    )
+                                }
+                            >
+                                Import {sortMode.key === 'total' && (sortMode.order === 'asc' ? '↑' : '↓')}
+                            </button>
+
+                            <button
+                                className="btn btn-outline"
+                                onClick={() => setSortMode({ key: 'none', order: 'asc' })}
                             >
                                 Reiniciar
                             </button>
                         </div>
                     </div>
 
-                    {/* Llistat */}
                     {filteredAndSortedQuotes.map((q, i) => (
                         <div key={i} className="quote-card p-4 rounded-lg shadow bg-white mb-4">
                             <div className="quote-left mb-2">
