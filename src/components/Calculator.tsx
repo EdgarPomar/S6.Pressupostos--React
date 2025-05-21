@@ -44,7 +44,6 @@ const Calculator: React.FC = () => {
         }
     )
 
-    // Nou estat per activar/desactivar pressupost anual amb descompte
     const [isAnnual, setIsAnnual] = useState(false)
 
     const total = useMemo(() => {
@@ -58,7 +57,7 @@ const Calculator: React.FC = () => {
         }, 0)
 
         if (isAnnual) {
-            baseTotal = baseTotal * 0.8 // 20% de descompte
+            baseTotal = baseTotal * 0.8 // 20% descompte
         }
 
         return baseTotal
@@ -146,6 +145,20 @@ const Calculator: React.FC = () => {
             </button>
             <h1 className="text-2xl font-bold">Calculadora de Serveis</h1>
 
+            {/* Toggle mensual/anual */}
+            <div className="toggle-container">
+                <span className="text-sm font-medium">Pagament mensual</span>
+                <label className="toggle-switch">
+                    <input
+                        type="checkbox"
+                        checked={isAnnual}
+                        onChange={() => setIsAnnual(!isAnnual)}
+                    />
+                    <span className="toggle-slider" />
+                </label>
+                <span className="text-sm font-medium">Pagament anual</span>
+            </div>
+
             <div className="service-list">
                 {services.map(service => (
                     <ServiceSelector
@@ -158,19 +171,6 @@ const Calculator: React.FC = () => {
                         )}
                     </ServiceSelector>
                 ))}
-            </div>
-
-            {/* Botó per activar/desactivar pressupost anual */}
-            <div className="mb-4">
-                <label className="inline-flex items-center cursor-pointer">
-                    <input
-                        type="checkbox"
-                        checked={isAnnual}
-                        onChange={() => setIsAnnual(!isAnnual)}
-                        className="form-checkbox"
-                    />
-                    <span className="ml-2 font-medium">Pressupost anual (20% descompte)</span>
-                </label>
             </div>
 
             <div className="total text-xl font-semibold">
