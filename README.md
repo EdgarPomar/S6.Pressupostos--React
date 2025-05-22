@@ -1,54 +1,114 @@
-# React + TypeScript + Vite
+# 💼 Pressupostos (React + TypeScript)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aquest projecte és una aplicació de calculadora de pressupostos interactiva desenvolupada amb **React**, **TypeScript** i **Vite**, i estilitzada amb **Tailwind CSS**.
 
-Currently, two official plugins are available:
+## 🚀 Funcionalitats
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### ✅ Selecció de serveis
+- L'usuari pot seleccionar entre diferents serveis:
+  - **Seo** (300 €)
+  - **Ads** (400 €)
+  - **Web** (500 € + cost addicional per pàgines i idiomes)
 
-## Expanding the ESLint configuration
+### 🧩 Configuració de Web
+- Si l'usuari selecciona el servei "Web", pot configurar:
+  - Nombre de **pàgines**
+  - Nombre de **llenguatges**
+- Cada unitat addicional de pàgines o idiomes incrementa el preu en **30 €**.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 💰 Càlcul del total
+- El total es calcula dinàmicament segons els serveis seleccionats.
+- Opcionalment, l'usuari pot activar un **pressupost anual** amb **20% de descompte**.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 📝 Formulari per demanar pressupost
+- Inputs per:
+  - **Nom**
+  - **Telèfon**
+  - **Email**
+- Validació de correu i número de telèfon.
+- Un cop enviat, es guarda un nou **pressupost** amb:
+  - Serveis seleccionats
+  - Total
+  - Data
+
+### 📋 Llistat de pressupostos
+- Tots els pressupostos guardats es mostren amb:
+  - Dades del client
+  - Serveis contractats
+  - Import total
+- Funcionalitats:
+  - **Cercar per nom**
+  - **Ordenar per**: Nom, Data o Import
+  - **Reiniciar filtres**
+
+---
+
+## 🗂️ Estructura del projecte
+
+```bash
+src/
+├── components/
+│   ├── BudgetForm.tsx
+│   ├── BudgetList.tsx
+│   ├── Calculator.tsx
+│   ├── ServiceSelector.tsx
+│   └── WebConfigurator.tsx
+├── pages/
+│   └── Welcome.tsx
+├── router/
+├── types/
+├── App.tsx
+├── main.tsx
+├── styles.css
+├── tailwindCssStyle.css
+├── vite-env.d.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🛠️ Tecnologies
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- ⚛️ React
+- 📘 TypeScript
+- 💨 Tailwind CSS
+- ⚡ Vite
+- 🧭 React Router
+- 📦 npm
+
+---
+
+## 🧪 Execució del projecte
+
+1. **Instal·lació de dependències**
+   ```bash
+       npm install
+   ```
+
+2. **Inici del servidor de desenvolupament**
+   ```bash
+       npm run dev
+   ```
+
+3. **Compilació per producció**
+   ```bash
+   npm run build
+   ```
+
+---
+
+## ✨ Millores possibles
+
+- Persistència dels pressupostos a `localStorage` o backend.
+- Exportació a PDF.
+- Autenticació d’usuaris.
+- Traduccions multilingües.
+
+---
+
+## 📸 Captura
+
+> L'estructura del projecte tal com es veu a Visual Studio Code:
+
+![image](https://github.com/user-attachments/assets/20866b1c-b4bf-4194-92e0-9d4bff559469)
+
+---
